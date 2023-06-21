@@ -1,9 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
-using System.Security.Policy;
 using System.Text;
 using System.Text.RegularExpressions;
 using HttpServer.Model;
+using HttpServer.Server.HttpRequest;
 using Newtonsoft.Json;
 
 namespace HttpServer.Server
@@ -25,6 +26,7 @@ namespace HttpServer.Server
 
         public void StartServer(bool turnOn)
         {
+          
             string url = BuildUrl();
             SetupListener(url, turnOn);
 
@@ -91,8 +93,8 @@ namespace HttpServer.Server
 
         private void SendSuccessResponse(HttpListenerResponse response, int parsedNumber)
         {
-            var responseData = new { Number = parsedNumber, Message = "You requested number: " + parsedNumber };
-            var responseObject = new Data(parsedNumber, "ID", parsedNumber.ToString());
+            GetAlbums get = new GetAlbums("https://jsonplaceholder.typicode.com/", "albums");
+            var responseObject = get.GetData();
 
             string jsonResponse = JsonConvert.SerializeObject(responseObject);
             byte[] buffer = Encoding.UTF8.GetBytes(jsonResponse);
